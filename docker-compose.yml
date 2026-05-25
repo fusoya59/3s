@@ -7,7 +7,14 @@ services:
     container_name: 3s
     entrypoint: ["/usr/local/bin/3s"]
     volumes:
-      - ~/.config/3s:/home/3s/.config/3s:ro
-      - ~/.cache/3s:/home/3s/.cache/3s
+      - 3s-config:/home/3s/.config/3s
+      - 3s-cache:/home/3s/.cache/3s
     stdin_open: true
     tty: true
+    security_opt:
+      - seccomp:unconfined
+    shm_size: "2gb"
+
+volumes:
+  3s-config:
+  3s-cache:

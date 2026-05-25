@@ -14,6 +14,7 @@ import (
 
 	_ "modernc.org/sqlite"
 
+	"github.com/fusoya59/3s/internal/browser"
 	"github.com/fusoya59/3s/internal/config"
 )
 
@@ -56,35 +57,20 @@ func cmdStatus(args []string, cfgPath string) int {
 
 	// --- Browser Check ---
 	fmt.Println("── Browser ──")
-	chromiumPath := ""
-	if cfg != nil && cfg.BrowserBinPath != "" {
-		chromiumPath = cfg.BrowserBinPath
-	}
-	if chromiumPath == "" {
-		chromiumNames := []string{"google-chrome-stable", "google-chrome", "chromium-browser", "chromium", "chrome"}
-		for _, name := range chromiumNames {
-			if p, err := exec.LookPath(name); err == nil {
-				chromiumPath = p
-				break
-			}
-		}
-	}
-
-	if chromiumPath != "" {
-		cmd := exec.Command(chromiumPath, "--version")
+	binPath, err := browser.ResolveExisting(cfgPathResolved)
+	if err != nil || binPath == "" {
+		fmt.Println("  ✗ chromium not found")
+		fmt.Println("    → Run '3s init' to download and configure chromium")
+		failCount++
+	} else {
+		cmd := exec.Command(binPath, "--version")
 		if out, err := cmd.Output(); err == nil {
 			fmt.Printf("  ✓ %s", string(out))
 		} else {
 			fmt.Printf("  ✗ binary found but version check failed: %v\n", err)
-			fmt.Println("    → Chromium may be corrupted. Reinstall: sudo pacman -S chromium")
+			fmt.Println("    → Chromium may be corrupted. Re-run '3s init'")
 			failCount++
 		}
-	} else {
-		fmt.Println("  ✗ chromium not found")
-		fmt.Println("    → Install: sudo pacman -S chromium")
-		fmt.Println("      or: npx @puppeteer/browsers install chromium")
-		fmt.Println("      or set browser_bin_path in ~/.config/3s/config.json")
-		failCount++
 	}
 
 	// --- Engine Check ---

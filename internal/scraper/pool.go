@@ -28,6 +28,7 @@ func NewPool(binPath string, timeout time.Duration) (*Pool, error) {
 	opts := []bonk.LaunchOption{
 		bonk.Headless(true),
 		bonk.Stealth(true),
+		bonk.Args("--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"),
 	}
 	if binPath != "" {
 		opts = append(opts, bonk.ChromePath(binPath))

@@ -101,15 +101,6 @@ func extractGlobalFlags(args []string) (string, string, []string) {
 	return cfgPath, format, remaining
 }
 
-// configDir returns the OS-appropriate config directory for 3s.
-func configDir() string {
-	dir, err := os.UserConfigDir()
-	if err != nil {
-		return ""
-	}
-	return filepath.Join(dir, "3s")
-}
-
 // cacheDir returns the OS-appropriate cache directory for 3s.
 func cacheDir() string {
 	dir, err := os.UserCacheDir()
@@ -134,7 +125,7 @@ Commands:
   scrape [url]       Scrape URL(s) - single URL arg or pipe NDJSON
   sanitize [html]    Sanitize HTML - single HTML arg or pipe NDJSON
   run <query>        Search -> Scrape -> Sanitize in one go
-  init               Download chromium, create config, health check
+  init               Download Chromium (if needed), create config, health check
   status             Engine chrome cache status
   cache <subcmd>     Cache operations (purge)
 
