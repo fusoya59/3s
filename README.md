@@ -12,44 +12,6 @@ Search ──→ Scrape ──→ Sanitize
  URLs      raw HTML    markdown
 ```
 
-## Install
-
-### From source
-
-```bash
-# Requires: Go 1.26+
-go install github.com/fusoya59/3s@latest
-```
-
-### From Docker
-
-```bash
-docker build -t 3s .
-docker run --rm -it 3s search "hello world"
-```
-
-### Dependencies
-
-- **SQLite** — pure-Go via `modernc.org/sqlite`. No CGO or system libraries required.
-- **Chromium** — required for scraping. Install via package manager or run `3s init`.
-  - Debian/Ubuntu: `sudo apt install chromium-browser`
-  - Arch: `sudo pacman -S chromium`
-  - Alpine: `apk add chromium`
-
-## Testing
-
-```bash
-# Run all tests
-go test ./...
-
-# Run tests for a specific package
-go test ./cmd/...
-go test ./internal/engine/...
-
-# Verbose output
-go test -v ./...
-```
-
 ## Quick Start
 
 ```bash
@@ -67,13 +29,41 @@ go test -v ./...
 3s status
 ```
 
+## Install
+
+### From source
+
+```bash
+# Requires: Go 1.26+
+go install github.com/fusoya59/3s@latest
+```
+
+### From Docker
+
+```bash
+docker build -t 3s .
+docker run --rm -it 3s search "hello world"
+```
+
+## Testing
+
+```bash
+# Run all tests
+go test ./...
+
+# Run tests for a specific package
+go test ./cmd/...
+go test ./internal/engine/...
+
+# Verbose output
+go test -v ./...
+```
+
 ## Usage
 
 ### Global Flags
 
 ```
--c <path>    Config file path (default: ~/.config/3s/config.json)
--f <format>  Output format: json or table (default: json)
 -h           Show help
 -v           Show version
 ```
@@ -81,8 +71,10 @@ go test -v ./...
 ### search
 
 ```
-3s search <query> [options]
+3s search [options] <query>
 
+-c <path>       Config file path (default: ~/.config/3s/config.json)
+-f <format>     Output format: json or table (default: json)
 -l <n>          Max results (default: 10)
 -e <engines>    Comma-separated engines: brave,duckduckgo,brave-news,bingnews
 -r              Refresh cache (fetch fresh results)
@@ -96,6 +88,8 @@ go test -v ./...
 ```
 3s scrape [options] [url]
 
+-c <path>       Config file path (default: ~/.config/3s/config.json)
+-b <n>          Batch size — concurrent scrapes (default: 3)
 -m <n>          Max characters for scraped content (default: 25000)
 -r              Refresh cache
 --browser-bin   Path to Chrome/Chromium binary
@@ -109,7 +103,9 @@ Single mode: `3s scrape https://example.com`
 ```
 3s sanitize [options] [rawhtml]
 
+-c <path>       Config file path (default: ~/.config/3s/config.json)
 -m <n>          Max characters for sanitized content (default: 25000)
+-raw            Include raw HTML in output
 ```
 
 Pipe mode: `3s search "query" | 3s scrape | 3s sanitize`
@@ -118,21 +114,26 @@ Single mode: `3s sanitize '<html>...</html>'`
 ### run
 
 ```
-3s run <query> [options]
+3s run [options] <query>
 
+-c <path>       Config file path (default: ~/.config/3s/config.json)
+-f <format>     Output format: json or table (default: json)
 -l <n>          Max results (default: 10)
 -e <engines>    Comma-separated engines
--m <n>          Max characters for scraped/sanitized content
--j <n>          Concurrent scrapes (default: 3, NOT -c which is config path)
+-b <n>          Batch size — concurrent scrapes (default: 3)
+-m <n>          Max characters for scraped/sanitized content (default: 25000)
 -r              Refresh cache
 -o <file>       Output file (default: stdout)
+-raw            Include raw HTML in output
 --browser-bin   Path to Chrome/Chromium binary
 ```
 
 ### init
 
 ```
-3s init
+3s init [options]
+
+-c <path>    Config file path (default: ~/.config/3s/config.json)
 ```
 
 Creates config/cache directories, checks for Chromium, runs health checks.
@@ -140,13 +141,14 @@ Creates config/cache directories, checks for Chromium, runs health checks.
 ### status
 
 ```
-3s status [--verbose]
+3s status [options]
+
+-c <path>    Config file path (default: ~/.config/3s/config.json)
+--verbose    Show detailed error output
 ```
 
 Checks browser, engines (duckduckgo, brave, bingnews), cache, and config.
 Shows per-failure recovery tips. Exits 1 if any check fails, 0 otherwise.
-
-- `--verbose` — show detailed error output (raw HTTP codes, file paths)
 
 Examples:
 
@@ -164,12 +166,17 @@ Examples:
 ### cache
 
 ```
-3s cache purge
+3s cache <subcommand> [options]
+
+Subcommands:
+  purge        Delete the cache database
 ```
 
-Deletes the cache database.
+Use `3s cache <subcommand> -h` for subcommand-specific options.
 
 ## Output Formats
+
+Available on `search` and `run` commands.
 
 - `-f json` (default): NDJSON when piped, JSON array on terminal
 - `-f table`: Terminal table (errors on pipe)
