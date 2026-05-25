@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://bingnews.example.com/1",
+    "title": "Bing News One",
+    "snippet": "Bing snippet one.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  },
+  {
+    "url": "https://bingnews.example.com/2",
+    "title": "Bing News Two",
+    "snippet": "Bing snippet two.",
+    "thumbnail": "https://www.bing.com/th?id=abc",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  }
+]

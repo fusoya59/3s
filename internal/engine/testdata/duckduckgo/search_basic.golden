@@ -1,0 +1,23 @@
+[
+  {
+    "url": "https://example.com/page1",
+    "title": "Example Page 1",
+    "snippet": "This is snippet one for testing.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  },
+  {
+    "url": "https://example.org/page2",
+    "title": "Example Page 2",
+    "snippet": "Snippet two here.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  },
+  {
+    "url": "https://example.net/page3",
+    "title": "Example Page 3",
+    "snippet": "Third snippet with more text.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  }
+]

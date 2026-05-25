@@ -1,0 +1,121 @@
+name: CI
+
+on:
+  push:
+    tags: ['v*']
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - 'CODE_OF_CONDUCT.md'
+      - 'CONTRIBUTING.md'
+      - 'ROADMAP.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.pre-commit-config.yaml'
+      - '.golangci.yml'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - '**.md'
+      - 'LICENSE'
+      - 'CODE_OF_CONDUCT.md'
+      - 'CONTRIBUTING.md'
+      - 'ROADMAP.md'
+      - 'CHANGELOG.md'
+      - '.gitignore'
+      - '.pre-commit-config.yaml'
+      - '.golangci.yml'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+      - uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.12.2
+          args: --timeout=5m
+
+  vulncheck:
+    name: Vulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: golang/govulncheck-action@v1
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+      - run: go test -race -v ./...
+
+  build:
+    if: startsWith(github.ref, 'refs/tags/v')
+    name: Build (${{ matrix.goos }}/${{ matrix.goarch }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - {goos: linux, goarch: amd64, ext: ''}
+          - {goos: linux, goarch: arm64, ext: ''}
+          - {goos: darwin, goarch: amd64, ext: ''}
+          - {goos: darwin, goarch: arm64, ext: ''}
+          - {goos: windows, goarch: amd64, ext: '.exe'}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+      - name: Build
+        env:
+          CGO_ENABLED: '0'
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          BIN=3s-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }}
+          go build -trimpath -ldflags="-s -w" -o "$BIN" .
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            zip "${BIN%.exe}.zip" "$BIN"
+          else
+            tar czf "$BIN.tar.gz" "$BIN"
+          fi
+      - uses: actions/upload-artifact@v5
+        with:
+          name: 3s-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: 3s-${{ matrix.goos }}-${{ matrix.goarch }}.*
+
+  release:
+    name: Release
+    needs: [lint, vulncheck, test, build]
+    # Only create releases on version tags. Build only runs on tag too.
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: 3s-*
+          merge-multiple: true
+      - run: ls -la
+      - uses: softprops/action-gh-release@v2
+        with:
+          body: See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/CHANGELOG.md) for details.
+          files: |
+            3s-linux-amd64.tar.gz
+            3s-linux-arm64.tar.gz
+            3s-darwin-amd64.tar.gz
+            3s-darwin-arm64.tar.gz
+            3s-windows-amd64.zip

@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  3s:
+    build: .
+    image: 3s:latest
+    container_name: 3s
+    entrypoint: ["/usr/local/bin/3s"]
+    volumes:
+      - ~/.config/3s:/home/3s/.config/3s:ro
+      - ~/.cache/3s:/home/3s/.cache/3s
+    stdin_open: true
+    tty: true

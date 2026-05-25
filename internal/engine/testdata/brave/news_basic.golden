@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://news.example.com/article1",
+    "title": "News Title One",
+    "snippet": "News snippet one.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  },
+  {
+    "url": "https://news.example.com/article2",
+    "title": "News Title Two",
+    "snippet": "News snippet two.",
+    "thumbnail": "https://img.example.com/news.jpg",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  }
+]

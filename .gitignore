@@ -1,0 +1,25 @@
+# Build
+/3s
+*.exe
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# pi things
+.pi/
+
+# Cache
+*.db
+*.db-wal
+*.db-shm
+rez.json
+
+# Draft
+DRAFT.md

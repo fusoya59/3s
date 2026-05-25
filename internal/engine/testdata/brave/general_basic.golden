@@ -1,0 +1,17 @@
+[
+  {
+    "url": "https://brave-result.com/page",
+    "title": "Brave Title One",
+    "snippet": "Content snippet for brave result.",
+    "published_at": "0001-01-01T00:00:00Z",
+    "cached": false
+  },
+  {
+    "url": "https://brave-result.org/page",
+    "title": "Brave Title Two",
+    "snippet": "Snippet with date prefix.",
+    "thumbnail": "https://img.example.com/thumb.jpg",
+    "published_at": "2026-03-15T00:00:00Z",
+    "cached": false
+  }
+]
