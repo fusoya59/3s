@@ -28,7 +28,7 @@ func cmdSearch(args []string, cfgPath string, format string) int {
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: 3s search [options] <query>\n\nOptions:\n")
-		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: ~/.config/3s/config.json)\n")
+		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: %s)\n", config.DefaultPath())
 		fmt.Fprintf(os.Stderr, "  -f <format>  Output format: json or table (default: json)\n")
 		fs.PrintDefaults()
 	}

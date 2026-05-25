@@ -25,8 +25,8 @@ type Config struct {
 
 // DefaultConfig returns sensible defaults.
 func DefaultConfig() *Config {
-	homeDir, _ := os.UserHomeDir()
-	defaultCache := filepath.Join(homeDir, ".cache", "3s", "cache.db")
+	cacheDir, _ := os.UserCacheDir()
+	defaultCache := filepath.Join(cacheDir, "3s", "cache.db")
 
 	return &Config{
 		Locale:             "en-US",
@@ -77,11 +77,11 @@ func Load(path string) (*Config, error) {
 
 // DefaultPath returns the default config file path.
 func DefaultPath() string {
-	homeDir, err := os.UserHomeDir()
+	configDir, err := os.UserConfigDir()
 	if err != nil {
 		return ""
 	}
-	return filepath.Join(homeDir, ".config", "3s", "config.json")
+	return filepath.Join(configDir, "3s", "config.json")
 }
 
 // Validate checks config values and returns any issues.

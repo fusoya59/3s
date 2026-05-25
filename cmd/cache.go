@@ -40,7 +40,7 @@ func cmdCachePurge(args []string, cfgPath string) int {
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: 3s cache purge [options]\n\n")
 		fmt.Fprintf(os.Stderr, "Deletes the cache database file.\n\nOptions:\n")
-		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: ~/.config/3s/config.json)\n")
+		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: %s)\n", config.DefaultPath())
 		fs.PrintDefaults()
 	}
 

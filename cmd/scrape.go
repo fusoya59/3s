@@ -27,7 +27,7 @@ func cmdScrape(args []string, cfgPath string) int {
 		fmt.Fprintf(os.Stderr, "Usage: 3s scrape [options] [url]\n\n")
 		fmt.Fprintf(os.Stderr, "If url is provided, scrapes that single URL.\n")
 		fmt.Fprintf(os.Stderr, "If stdin is a pipe, reads NDJSON records and scrapes each URL.\n\nOptions:\n")
-		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: ~/.config/3s/config.json)\n")
+		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: %s)\n", config.DefaultPath())
 		fs.PrintDefaults()
 	}
 

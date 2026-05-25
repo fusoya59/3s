@@ -101,22 +101,22 @@ func extractGlobalFlags(args []string) (string, string, []string) {
 	return cfgPath, format, remaining
 }
 
-// configDir returns ~/.config/3s
+// configDir returns the OS-appropriate config directory for 3s.
 func configDir() string {
-	home, err := os.UserHomeDir()
+	dir, err := os.UserConfigDir()
 	if err != nil {
 		return ""
 	}
-	return filepath.Join(home, ".config", "3s")
+	return filepath.Join(dir, "3s")
 }
 
-// cacheDir returns ~/.cache/3s
+// cacheDir returns the OS-appropriate cache directory for 3s.
 func cacheDir() string {
-	home, err := os.UserHomeDir()
+	dir, err := os.UserCacheDir()
 	if err != nil {
 		return ""
 	}
-	return filepath.Join(home, ".cache", "3s")
+	return filepath.Join(dir, "3s")
 }
 
 func printUsage() {

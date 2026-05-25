@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fusoya59/3s/internal/config"
 	"github.com/fusoya59/3s/internal/output"
 	"github.com/fusoya59/3s/internal/sanitizer"
 )
@@ -20,7 +21,7 @@ func cmdSanitize(args []string, cfgPath string) int {
 		fmt.Fprintf(os.Stderr, "Usage: 3s sanitize [options] [rawhtml]\n\n")
 		fmt.Fprintf(os.Stderr, "If rawhtml is provided, sanitizes that single HTML string and outputs markdown.\n")
 		fmt.Fprintf(os.Stderr, "If stdin is a pipe, reads NDJSON records and sanitizes each raw_html field.\n\nOptions:\n")
-		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: ~/.config/3s/config.json)\n")
+		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: %s)\n", config.DefaultPath())
 		fs.PrintDefaults()
 	}
 

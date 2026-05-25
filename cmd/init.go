@@ -18,7 +18,7 @@ func cmdInit(args []string, cfgPath string) int {
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: 3s init [options]\n\n")
 		fmt.Fprintf(os.Stderr, "Sets up 3s: creates config/cache dirs, checks chromium, health check.\n\nOptions:\n")
-		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: ~/.config/3s/config.json)\n")
+		fmt.Fprintf(os.Stderr, "  -c <path>    Config file path (default: %s)\n", config.DefaultPath())
 		fs.PrintDefaults()
 	}
 

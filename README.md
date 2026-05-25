@@ -183,7 +183,7 @@ Available on `search` and `run` commands.
 
 ## Configuration
 
-Config file: `~/.config/3s/config.json`
+Config file: `{config dir}/3s/config.json`
 
 | Field | Default | Description |
 |-------|---------|-------------|
@@ -194,7 +194,7 @@ Config file: `~/.config/3s/config.json`
 | scrape_timeout | 30 | Scrape timeout in seconds |
 | content_min_chars | 500 | Minimum content characters before poll exits |
 | content_poll_timeout | 5 | Content poll timeout in seconds |
-| cache_path | ~/.cache/3s/cache.db | SQLite cache path |
+| cache_path | {cache dir}/3s/cache.db | SQLite cache path |
 | cache_ttl | 300 | Cache TTL in seconds (5 min) |
 | browser_bin_path | "" | Path to Chrome/Chromium binary |
 | engine_config | {} | Per-engine settings (stub) |
